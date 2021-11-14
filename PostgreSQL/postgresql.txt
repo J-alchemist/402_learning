@@ -1,4 +1,6 @@
 【ubuntu用户操作：】
+psql --version 	//查看版本
+
 1.创建用户：
 Step1 创建用户：
 sudo useradd username -m
