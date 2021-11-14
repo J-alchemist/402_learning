@@ -1,0 +1,111 @@
+g2o的一般过程:
+https://www.cnblogs.com/talugirl/p/7384119.html
+1.自己定义顶点类、边类或者用已经有的。
+1.1定义顶点
+例子
+class CurveFittingVertex: public g2o::BaseVertex<3, Eigen::Vector3d>
+{
+public:
+EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+virtual void setToOriginImpl() // 重置
+{
+_estimate << 0,0,0;
+}
+
+virtual void oplusImpl( const double* update ) // 更新
+{
+_estimate += Eigen::Vector3d(update);
+}
+// 存盘和读盘：留空
+virtual bool read( istream& in ) {}
+virtual bool write( ostream& out ) const {}
+};
+自己能够操作的，修改类名为自己的类名。修改顶点的维度和类型，就是g2o:BaseVertex<>里的两个参数。
+函数setToOriginImpl{}里设置_estimate的初值。你可以如例子中_estimate<<0,0,0,也可以_estimate=SE3Quat(),也可以留空。
+oplusImpl是设定估计的更新值的函数，一般里面的变量都是更新值const double* update,至于这个update你可以设成update_什么的。然后函数里估计值会变成估计值和更新值的和或积，而更新值的类型必须修改成和顶点类型一致。也可以重写这个函数，在括号后输入override,而在{}定义一个新参数v,这个v可以和顶点类型不一致，v是由update得到或者由update和其他参数一起得到，然后是_estimate+=v,最后在设顶点估计值的时候，估计值要和v的类型一致。最重要的就是这个oplusImpl函数。
+而存盘和读盘函数，可以选择留空，或者在{}里输入你想输入的数，比如return false;
+等也可以设置参数。
+1.2定义边
+class CurveFittingEdge: public g2o::BaseUnaryEdge<1, double, CurveFittingVertex>
+{
+public:
+EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+CurveFittingEdge( double x ): BaseUnaryEdge(), _x(x) {}
+// 计算曲线模型误差
+void computeError()
+{
+const CurveFittingVertex* v = static_cast<const CurveFittingVertex*> (_vertices[0]);
+const Eigen::Vector3d abc = v->estimate();
+_error(0,0) = _measurement - std::exp( abc(0,0)*_x*_x + abc(1,0)*_x + abc(2,0) ) ;
+}
+virtual bool read( istream& in ) {}
+virtual bool write( ostream& out ) const {}
+public:
+double _x; // x 值， y 值为 _measurement
+};
+可操作的：边类名，边的顶点数，边数据类型，和边顶点类型。也就是g2o::BaseUnaryEdge<>中的内容。
+CurveFittingEdge( double x ): BaseUnaryEdge(), _x(x) {}这个是类赋值，可以有，也可以没有，如果有，那么要定义参数_x,因为这里是把x赋值给_x.
+最重要的就是计算误差函数computeError()，具体操作在{}，主要是要给出_error的具体形式。
+一般赋值_vertices[i]给顶点，比如v或者v1,v2等。这里v的类型就是之前我们定义的顶点类的指针。一般是这样定义的
+const 顶点类* v=static_cast<const 顶点类*>(_vertices[0])
+要么把v->estimate估计值传给新的值，要么直接用来计算误差值。误差值的是由测量值_measuremen减去预测值得到的，预测值是根据v->estimate得到的，具体怎么得按实际情况来。
+还有linearizeOplus函数，这个函数是求雅克比矩阵，也可以没有这个函数。雅克比矩阵也就是误差函数对顶点的求导值。不是范数啊。也会用到顶点的估计值来计算出雅克比矩阵的每一项的值。一般都是_jacobianOplusXi(i,j)=;
+过程：先把_vertices[0],_vertices[1]等赋值给顶点，跟computeError函数里一模一样，也是
+const 顶点类* 顶点名=static_cast<const 顶点类*>(_vertices[0]);
+是跟computeError函数里重名的。
+
+2.定义图模型
+typedef g2o::BlockSolver< g2o::BlockSolverTraits<3,1> > Block; // 每个误差项优化变量维度为3，误差值维度为1
+Block::LinearSolverType* linearSolver = new g2o::LinearSolverDense<Block::PoseMatrixType>(); // 线性方程求解器
+Block* solver_ptr = new Block( linearSolver ); // 矩阵块求解器
+// 梯度下降方法，从GN, LM, DogLeg 中选
+g2o::OptimizationAlgorithmLevenberg* solver = new g2o::OptimizationAlgorithmLevenberg( solver_ptr );
+// g2o::OptimizationAlgorithmGaussNewton* solver = new g2o::OptimizationAlgorithmGaussNewton( solver_ptr );
+// g2o::OptimizationAlgorithmDogleg* solver = new g2o::OptimizationAlgorithmDogleg( solver_ptr );
+g2o::SparseOptimizer optimizer; // 图模型
+optimizer.setAlgorithm( solver ); // 设置求解器
+optimizer.setVerbose( true ); // 打开调试输出
+上面的基本就是套路了。
+自己操作的是定义自己的误差项的优化变量的维度，还有误差值的维度，就是g2o::BlockSolverTraits<> 里的两个值。
+线性方程求解器如果是提取特征点之类的用Dense,稠密的，如果是要进行消元什么的，用Cholmod.
+优化算法一般用的都是列文伯格，也可以用高斯牛顿等。
+过程就是由线性方程求解器linearSolver得到矩阵块求解器solver_ptr,由矩阵块求解器得到梯度下降方法solver,图模型再设置算法为solver.
+
+2.1图模型添加顶点
+CurveFittingVertex* v = new CurveFittingVertex();
+v->setEstimate( Eigen::Vector3d(0,0,0) );
+v->setId(0);
+optimizer.addVertex( v );
+一般的模式就是先设置顶点，如果是多于一个顶点的话，以顶点数量为最大值做一个for循环，在for循环里，设置顶点，顶点估计值，顶点id,是否可以边缘化，也就是之后要不要进行消元，图模型添加边。形式如下
+顶点类* v=new 顶点类();要有一个括号，如果有输入值的话，可以放在括号里。
+v->setId(i);
+v->setEstimate();//估计值如果有初值，就添加上，如果没有，就设成和顶点类型相同的，并且设为0.如果顶点中update被重写，那么估计值类型和顶点类型不一致
+v->setMarginlized(true);//默认false,需要设置的时候都是true
+optimizer.addVertex(v)
+注意顶点和边都是指针，所以用->访问。
+2.2图模型添加边
+for ( int i=0; i<N; i++ )
+{
+CurveFittingEdge* edge = new CurveFittingEdge( x_data[i] );
+edge->setId(i);
+edge->setVertex( 0, v ); // 设置连接的顶点
+edge->setMeasurement( y_data[i] ); // 观测数值
+edge->setInformation( Eigen::Matrix<double,1,1>::Identity()*1/(w_sigma*w_sigma) ); // 信息矩阵：协方差矩阵之逆
+optimizer.addEdge( edge );
+}
+根据边的数量做一个for循环，先设置边。然后边要设置id,顶点，测量值，信息矩阵，图模型添加边。
+形式如下，设边名称为edge的话
+边类* edge=new 边类();
+edge->setId(j);
+edge->setVertex(0,v);
+edge->setMeasurement();测量值是必须得有的，视具体情况而定。
+edge->setInformation();设置信息矩阵，信息矩阵是协方差矩阵的逆，所以也可以称之为设置协方差矩阵。
+edge->setParameterId();//一般没有这一项
+optimizer->addEdge(edge);
+
+2.3图模型求解
+optimizer.initializeOptimization();
+optimizer.optimize(100);
+直接就这两句就可以了。
+optimize()括号内的数值可以修改。
+

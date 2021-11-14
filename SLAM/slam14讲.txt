@@ -1,0 +1,124 @@
+【普通摄像头】：第三章00：42：43
+sudo apt-get install ros-kinetic-usb-cam
+roslaunch usb_cam usb_cam-test.launch
+rqt_image_view
+
+【Kinect-rgb摄像头】：第三章00：53：12
+sudo apt-get install ros-kinetic-freenect-*
+gir clone https://github.com/avin2/SensorKinect.git
+cd SensorKinect/Bin
+tar -xvf SensorKinect093-Bin-Linux-x64-v5.1.2.1.tar.bz2
+sudo ./install.sh
+
+
+【激光雷达：】57分钟第三章
+sudo apt-get install ros-kinetic-rplidar-ros
+rosrun rplidar_ros rplidarNode
+
+URDF建模：第三章1小时5分、第四章
+link、joint
+xacro优化urdf文件
+xacro的常用语句
+
+slam功能包：(栅格)
+sudo apt-get install ros-kinetic-gmapping
+sudo apt-get install ros-kinetic-hector-slam（效果不好）
+
+【cartographer】1小时33
+需要将使用的文件放在cartographer工程里重新编译
+https://storage.googleapis.com/cartographer-public-data/bags/backpack_2d/cartographer_paper_deutsches_museum.bag
+
+sudo apt-get install python-wstool python-rosdep ninja-build
+catkin_make_isolated --install --use-ninja		//单独编译每个功能包
+
+
+使用slam：（出现莫名其妙的错误时，使用source一下）（跑仿真slam）
+roslaunch mbot_laser_nav_gazebo.launch
+rosch  mbot_gazebo mbot_laser_nav_gazebo.launch
+rosrun map_server map_saver -f cloister_gmapping//保存地图在当前命令执行的路径下
+
+【ORB_SLAM】
+（基于单目摄像头，建立的点云地图）
+sudo apt-get install libboost-all-dev libblas-dev liblapck-dev
+https://github.com/raulmur/ORB_SLAM2.git
+编译eigen、g2o、DBoW2
+
+//先配置环境
+export ROS_PACKAGE_PATH=${ROS_PACKAGE_PATH}:/home/gj/ORB_SLAM2/Examples/ROS
+source  /home/gj/ORB_SLAM2/Examples/ROS/ORB_SLAM2/build/devel/setup.zsh
+
+//使用数据包测试
+roscore
+rosrun ORB_SLAM2 Mono Vocabulary/ORBvoc.txt Examples/ROS/ORB_SLAM2/Asus.yaml
+rosbag play rgbd_dataset_freiburg1_desk.bag /camera/rgb/image_color:=/camera/image_raw
+//要自己下载该数据包rgbd_dataset_freiburg1_desk.bag
+
+//真实摄像头测试
+roslaunch mbot_navigation usb_cam_remap.launch
+rosrun ORB_SLAM2 Mono Vocabulary/ORBvoc.txt Examples/ROS/ORB_SLAM2/Asus.yaml
+
+
+【move_base】
+导航框架：全局/局部路径
+apt-get install ros-kinetic-navigation
+百度搜索movebase的Wiki，学习参数配置
+
+amcl（可以提高定位精度），二维概率定位（类似里程计定位）
+
+导航仿真：
+roslaunch mbot_gazebo mobot_laser_nav_gazebo.launch
+roslaunch mobot_navigation nav_cloister_demo.launch
+2Dpose调整机器人的初始位姿
+2DNav给定机器人目标位置
+可以在gazebo中实时insert障碍物，机器人可以重新规划路径
+
+自主同时slam+导航：
+roslaunch mbot_gazebo mobot_laser_nav_gazebo.launch
+roslaunch mobot_navigation exploring_slam_demo.launch
+rosrun mbot_navigation exporing_slam.py
+
+
+
+【技巧】：
+关于urdf建模，更高级别的建模需要使用三维设计软件，使用插件到处urdf模型
+
+urdf_to_graphiz mbot_base.urdf //输出urdf各个节点的连接情况
+
+rostopic echo /odom	//输出历程信息
+
+rosrun rviz rviz 	//可以add加入机器人模型，在add加入点云或者激光雷达信息，雷达点太小，可以加大size
+
+rosmsg show geometry_msgs/Twist		//速度信息
+
+rosmsg show sensor_msgs/LaserScan	//深度信息
+
+rosmsg show nav_msgs/Odometry		//里程计
+
+rosrun map_server map_saver -f cloister_gmapping    //保存建模完成的地图
+
+深度信息：距离
+
+rqt_plot工具：第一章
+分布式通信：第二章  01：28：00
+/ect/hosts
+rqt_console：日志输出工具，第二章02：08：30
+rqt_reconfigure：参数动态配置工具
+
+IMU(惯性测量单元)：包含陀螺仪、加速度计、磁力计等
+gnss：组合导航（imu+gps）
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

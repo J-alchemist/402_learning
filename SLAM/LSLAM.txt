@@ -1,0 +1,58 @@
+
+
+# 地图类型
+
+覆盖栅格地图(Occupany Grid Map)---2d激光（基于图优化的Cartographer）
+点云地图---3d激光
+
+# 帧间匹配算法
+
+ICP(Iterative Closest Point)
+PL-ICP(Point-to-Line Iterative Closest Point)
+NDT(Normal Distribution Transfomation)
+CSM(Correlation Scan Match)
+
+# 回环检测
+
+Scan-to-Scan
+Scan-to-Map
+Map-to-Map
+
+# 线性最小二乘
+
+![image-20211018104247338](/home/gj/.config/Typora/typora-user-images/image-20211018104247338.png)
+
+![image-20211018104828991](/home/gj/.config/Typora/typora-user-images/image-20211018104828991.png)
+
+例如：里程计标定假设：
+
+![image-20211018105029655](/home/gj/.config/Typora/typora-user-images/image-20211018105029655.png)
+
+# 激光雷达
+
+测距原理：三角测距、飞行时间(TOF)
+数学模型：光束模型、似然场模型
+畸变矫正：ICP、VICP、Odom/IMU辅助（二次插值）
+
+# 前端配准
+
+帧间匹配算法
+
+# 优化
+
+一、基于滤波器的优化：
+贝叶斯滤波：估计的是概率分布,不是具体的数值，是一个抽象的表达形式—对于不同问题有不同的实现方式(卡尔曼家族、粒子滤波)
+
+粒子滤波（Proposal分布）
+
+二、基于图优化
+地图主要分为三类: ![image-20211018112402183](/home/gj/.config/Typora/typora-user-images/image-20211018112402183.png)
+
+建图算法：覆盖栅格建图算法（可）、计数建图算法
+
+
+
+# 3D激光SLAM
+
+
+
