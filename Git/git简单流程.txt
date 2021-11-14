@@ -1,0 +1,18 @@
+sudo apt-get install git
+随便创建个文件夹作为本地仓库，也可以直接家目录作为本地仓库
+git init
+
+git remote add origin git@github.com: qqngwzlb/402Learning.git
+git remote -v	查看远程库
+git remote rm origin	解除远程库连接
+
+
+git add xx.txt
+git commit -m "add a file"
+git status
+git branch -a	查看分支
+git log	--pretty=oneline 查看当前分支提交的文件
+
+git push -u origin master 推送本地master分支内容到远程master分支
+git push origin master	第二次推送不必加-u参数了
+git clone https://github.com/qqngwzlb/402Learning.git 
