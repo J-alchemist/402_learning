@@ -1,0 +1,43 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+#define alpha 0.5//混合系数
+
+int main(int argc, char* argv[])
+{
+	Mat src1 = imread("F:\\OpenCV\\Resources\\4.jpg");
+	Mat src2 = imread("F:\\OpenCV\\Resources\\5.jpg");
+	Mat dst;
+	if (!src1.data) {
+
+		printf("couldn't open src1 image\n!");
+		return -1;
+	}
+	if (!src2.data) {
+
+		printf("couldn't open src2 image!\n");
+		return -1;
+	}
+	//检测两张图片类型、大小是否一致
+	if (src1.cols == src2.cols && src1.rows == src2.rows
+						&& src1.type() == src2.type()) {
+		addWeighted(src1, alpha, src2, (1 - alpha), 0.0, dst);//像素带权重相加
+		//multiply(src1, src2, dst);//像素乘
+	}
+	else
+	{
+		printf("image don't mix!\n");
+		return -1;
+	}
+	
+	namedWindow("show", CV_WINDOW_AUTOSIZE);
+	imshow("show", dst);
+
+	waitKey(0);
+
+	return 0;
+}

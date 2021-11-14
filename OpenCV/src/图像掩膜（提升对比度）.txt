@@ -1,0 +1,56 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+int main(int argc, char** argv)
+{
+	Mat src,dst;
+	src = imread("F:\\OpenCV\\Resources\\5.jpg");
+	if(!src.data){
+		printf("couldn't open this picture!");
+
+		return -1;	
+	}
+	namedWindow("demo1", 1);
+	imshow("demo1", src);
+
+	//掩膜后（自写），忽略最外围一周的像素点来提高图片的对比度
+	int offset = src.elemSize();
+//	int offset = src.channels();//channels返回每个像素点的色域通道，rgb返回3
+	int col = (src.cols-1) * offset;//忽略最左一列像素
+	int row = (src.rows-1);//忽略最上一行像素
+
+	dst = Mat::zeros(src.size(), src.type());//新图像的空间初始化为黑色
+
+	for (int r = 1; r < row; r++) {
+		//原图指针
+		const uchar *r_cur = src.ptr<uchar>(r); //获取当前行指针
+		const uchar *r_pre = src.ptr<uchar>(r-1);//上一行
+		const uchar *r_next = src.ptr<uchar>(r+1);//下一行
+		//新图指针
+		uchar *tor_cur = dst.ptr<uchar>(r);
+		for (int c = offset; c < col; c++) {
+			tor_cur[c] = saturate_cast<uchar>(5 * r_cur[c] - \
+							(r_cur[c- offset] +  r_cur[c+ offset] + r_pre[c] + r_next[c]));
+			//色度限制函数saturate_cast<uchar>()  0-255
+			//此处saturate_cast<uchar>()函数必须在计算同时调用
+		}
+	}
+	namedWindow("YANMO1 demo", CV_WINDOW_AUTOSIZE);
+	imshow("YANMO1 demo", dst);
+
+	//openCV掩膜
+	Mat kernel = (Mat_<char>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);//定义3x3掩膜矩阵
+	filter2D(src, dst, src.depth(), kernel); //设置src.depth()<0 传入则和原图色深一样
+	namedWindow("YANMO2 demo", CV_WINDOW_AUTOSIZE);
+	imshow("YANMO2 demo", dst);
+
+	waitKey(0);
+
+	return 0;
+}
+
+

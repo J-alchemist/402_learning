@@ -1,0 +1,45 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+int element_size = 3;//起始调整数
+int max_size = 21;//最大调整数
+Mat src, dst;
+
+void CallBack_demo(int, void*);
+int main(int argc, char* argv[])
+{
+	src = imread("F:\\OpenCV\\Resources\\9.png");
+	if (!src.data) {
+
+		printf("couldn't open this image!");
+		return -1;
+	}
+	namedWindow("show1", CV_WINDOW_AUTOSIZE);
+	imshow("show1", src);
+//使用一个滑块小控件调整元素
+	namedWindow("show2", CV_WINDOW_AUTOSIZE);
+	createTrackbar("Element Size", "show2", &element_size, max_size, CallBack_demo);
+	CallBack_demo(0, 0);
+
+	waitKey(0);
+
+	return 0;
+}
+
+void CallBack_demo(int, void*)
+{
+	int s = element_size * 2 + 1;//保证为奇数
+	//设置算子形状、大小、中心点
+	Mat structureElement = getStructuringElement(MORPH_ELLIPSE, Size(s,s),Point(-1,-1));
+	//膨胀操作
+	dilate(src, dst, structureElement, Point(-1, -1), 1);
+	//腐蚀操作
+	//erode(src, dst, structureElement, Point(-1, -1), 1);
+
+	imshow("show2", dst);
+	return;
+}

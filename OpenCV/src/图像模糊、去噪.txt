@@ -1,0 +1,63 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+
+int main(int argc, char* argv[])
+{
+	Mat src = imread("F:\\OpenCV\\Resources\\5.jpg");
+	if (!src.data) {
+
+		printf("couldn't open this image!");
+		return -1;
+	}
+
+	namedWindow("srcshow", CV_WINDOW_AUTOSIZE);
+	imshow("srcshow", src);
+
+	///* 均值模糊/高斯模糊：
+	// * 模糊度由模糊算子Size(x,y)中xy大小决定
+	// * x != y 时，大的那个方向的模糊度更强
+	// * x，y最小为1,且为奇数
+	// */
+	////均值模糊
+	//Mat BlurDst;
+	//blur(src, BlurDst, Size(9, 9), Point(-1,-1));
+	//namedWindow("BlurDstshow", CV_WINDOW_AUTOSIZE);
+	//imshow("BlurDstshow", BlurDst);
+
+	////高斯模糊
+	//Mat GaussianDst;
+	//GaussianBlur(src, GaussianDst, Size(9, 9), 10, 10);
+	//namedWindow("GaussianDstshow", CV_WINDOW_AUTOSIZE);
+	//imshow("GaussianDstshow", GaussianDst);
+
+	////中值滤波  
+	//Mat MidDst;
+	//medianBlur(src, MidDst, 3);
+	//namedWindow("Dstshow", CV_WINDOW_AUTOSIZE);
+	//imshow("Dstshow", MidDst);
+
+	//高斯双边滤波***(边缘保留更好)
+	/* 150:像素差值范围，在该范围内会正常计算，否则不计算
+	 * 越小轮廓越明显
+	 */
+	Mat GauDst;
+	bilateralFilter(src, GauDst, 15, 175, 3);
+	namedWindow("GauDstshow", CV_WINDOW_AUTOSIZE);
+	imshow("GauDstshow", GauDst);
+		//滤波完后可以进行对比度提升得到精致图像
+	Mat GauDstdeal;
+	Mat kernel = (Mat_<int>(3, 3) << 0, -1, 0, -1, 5, -1, 0, -1, 0);
+	filter2D(GauDst, GauDstdeal, -1, kernel, Point(-1,-1), 0);
+
+	namedWindow("GauDstdealshow", CV_WINDOW_AUTOSIZE);
+	imshow("GauDstdealshow", GauDstdeal);
+
+	waitKey(0);
+
+	return 0;
+}

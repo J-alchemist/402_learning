@@ -1,0 +1,23 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+	Mat src = imread("F:\\OpenCV\\Resources\\1.jpg");
+	if (!src.data) {
+
+		printf("couldn't open this image!");
+		return -1;
+	}
+
+	namedWindow("srcshow", CV_WINDOW_AUTOSIZE);
+	imshow("srcshow", src);
+
+	waitKey(0);
+
+	return 0;
+}

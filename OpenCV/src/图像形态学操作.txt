@@ -1,0 +1,33 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+	Mat src = imread("F:\\OpenCV\\Resources\\2.jpg");
+	if (!src.data) {
+
+		printf("couldn't open this image!");
+		return -1;
+	}
+	namedWindow("showsrc", CV_WINDOW_AUTOSIZE);
+	imshow("showsrc", src);
+	//形态学操作
+	Mat kernel = getStructuringElement(MORPH_RECT, Size(11, 11), Point(-1, -1));//Size()大小就是要去除噪点大小
+	Mat dst;
+	morphologyEx(src, dst, CV_MOP_OPEN, kernel);  //开操作
+//	morphologyEx(src, dst, CV_MOP_CLOSE, kernel);//闭操作
+	//CV_MOP_GRADIENT//梯度
+	//CV_MOP_TOPHAT  //顶帽操作
+	//CV_MOP_BLACKHAT//黑帽操作
+
+	imshow("showopen", dst);
+
+	waitKey(0);
+
+	return 0;
+}
+

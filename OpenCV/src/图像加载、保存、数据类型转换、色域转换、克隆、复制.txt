@@ -1,0 +1,42 @@
+#include <opencv2/opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+/*
+//常用函数
+src.copyTo(dst);				 //复制一张图
+Mat dst = src.clone();	         //完全复制一张图片
+src.convertTo(dst, CV_32F);		 //颜色数据类型转换，把src24位uchar转为dst的32位float
+								 //rgb图像一般是：CV_8UC3，gray图像：CV_8UC1
+*/
+int main(int argc, char** argv)
+{
+//读入显示
+	Mat src = imread("F:\\OpenCV\\Resources\\9.png", 1);
+	/*
+	<0：原图
+	IMREAD_GRAYSCALE = 0;灰度图
+	>0：RGB
+	*/
+	if (src.empty()) {
+		printf("couldn't open image!\n");
+		return -1;
+	}
+	namedWindow("Demo1", CV_WINDOW_AUTOSIZE);//窗口自动大小
+	imshow("Demo1", src);
+//改变色域
+	Mat toimg;
+	cvtColor(src, toimg, CV_BGR2GRAY);
+	namedWindow("Demo2", CV_WINDOW_AUTOSIZE);
+	imshow("Demo2", toimg);
+//保存图片(可以指定其他格式保存)
+//	imwrite("F:\\OpenCV\\Resources\\2'.png", toimg);
+
+
+	waitKey(0);
+
+
+	return 0;
+}

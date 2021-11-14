@@ -1,0 +1,129 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+Mat src;
+void drawLine();
+void drawRectangle();
+void drawEllipse();
+void drawCircle();
+void drawFill();
+void RandomDrawLine();
+
+int main(int argc, char* argv[])
+{
+    src = imread("F:\\OpenCV\\Resources\\1.jpg");
+	if (!src.data) {
+
+		printf("couldn't open this image!");
+		return -1;
+	}
+	//绘制文本：CV_FONT_HERSHEY_COMPLEX：字体； 1.0：字体大小
+	putText(src, "beautiful girl",Point(300,300), CV_FONT_HERSHEY_COMPLEX, 
+						1.0, Scalar(0, 0, 255), 1, 8);
+	//画函数调用
+	drawFill();
+
+	namedWindow("srcshow", CV_WINDOW_AUTOSIZE);
+	imshow("srcshow", src);
+
+	//随机画线
+	RandomDrawLine();
+
+	waitKey(0);
+
+	return 0;
+
+}
+
+void drawLine() {
+	
+	Point p1 = Point(10, 10);
+	Point p2;
+	p2.x = 200;
+	p2.y = 200;
+	Scalar line_color = Scalar(0, 0, 255);
+	//画线：线色、线粗细(值越大越粗)、线型
+	line(src, p1, p2, line_color, 2, LINE_8);	
+}
+
+void drawRectangle() {
+
+	Rect rect = Rect(200, 100, 300, 300);//起点坐标、长宽
+	Scalar rect_color = Scalar(255, 0, 0);
+	//画矩形
+	rectangle(src, rect, rect_color, 2, LINE_8);
+
+}
+void drawEllipse() {
+	Scalar ellipse_color = Scalar(0, 255, 0);
+	//画椭圆：Point(中心)、长短轴:Size(横轴，纵轴)、椭圆倾斜程度
+	ellipse(src, Point(src.cols/2, src.rows/2), Size(src.cols/4, src.rows/8),
+				90, 0, 360, ellipse_color, 2, LINE_8);
+}
+void drawCircle() {
+
+	Scalar circle_color = Scalar(0, 255, 100);
+	//画圆
+	circle(src, Point(src.cols / 2, src.rows / 2), 150, circle_color, 2, LINE_8);
+
+}
+void drawFill() {
+	//封闭区域的点
+	Point pt[1][5];
+	pt[0][0] = Point(100, 100);
+	pt[0][1] = Point(100, 200);
+	pt[0][2] = Point(200, 200);
+	pt[0][3] = Point(200, 100);
+	pt[0][4] = Point(100, 100);
+	const Point *pts[] = { pt[0] };
+	int npt[] = { 5 };
+
+	Scalar fill_color = Scalar(50, 255, 100);
+	//填充，1：一条轮廓，要多条还要定义数组
+	fillPoly(src, pts, npt, 1, fill_color, LINE_8);
+
+}
+
+void RandomDrawLine() {
+
+	RNG rng(591561);//创建随机数种子
+	Point pt1, pt2;
+
+	Mat img = Mat::zeros(src.size(), src.type());
+
+	while (1)
+	{
+		//随机两点
+		pt1.x = rng.uniform(0, src.cols);//生成正态分布随机数，在两个之间
+		pt1.y = rng.uniform(0, src.rows);
+		pt2.x = rng.uniform(0, src.cols);
+		pt2.y = rng.uniform(0, src.rows);
+		//随机颜色
+		Scalar color = Scalar(rng.uniform(0, 255), rng.uniform(0, 255), rng.uniform(0, 255));
+
+		line(img, pt1, pt2, color, 1, 8);
+		namedWindow("Line", CV_WINDOW_AUTOSIZE);
+		imshow("Line", img);
+
+		/*
+			waitKey(0),则表示程序会无限制的等待用户的按键事件
+			无键按下，返回-1，释放
+			有键按下，返回键值ASCII码，释放
+		*/
+		if (waitKey(200) > 0)//每次执行到此处时，等着0.2s，若无按键返回-1，释放，继续循环
+		{
+			break;
+		}
+	}
+
+
+}
+
+/*
+//高斯随机数
+RNG::gaussian(σ)   返回一个均值为0，标准差为σ的随机数
+*/

@@ -1,0 +1,50 @@
+#include <opencv2\opencv.hpp>
+#include <iostream>
+#include <math.h>
+
+using namespace cv;
+using namespace std;
+
+//设置对比度矫正参数
+#define alpha  1.2
+#define offset 30
+
+int main(int argc, char* argv[])
+{
+	Mat src = imread("F:\\OpenCV\\Resources\\5.jpg",0);//0以灰度读入此图
+	if (!src.data) {
+
+		printf("couldn't open this image!");
+		return -1;
+	}
+	namedWindow("srcshow", CV_WINDOW_AUTOSIZE);
+	imshow("srcshow", src);
+	//对比度操作
+	Mat dst;
+	dst = Mat::zeros(src.size(), src.type());//type()返回图像像素类型，比如CV_8UC3
+	//转换为浮点型，提高计算精度
+	Mat fsrc;
+	src.convertTo(fsrc, CV_32F);
+
+	for(int r = 0; r < src.rows; r++){
+		for (int c = 0; c < src.cols; c++) {
+			if (src.channels() == 3) {
+				Vec3f &p = fsrc.at<Vec3f>(r, c);
+				//调整bgr
+				dst.at<Vec3b>(r, c)[0] = saturate_cast<uchar>(p[0]*alpha + offset);
+				dst.at<Vec3b>(r, c)[1] = saturate_cast<uchar>(p[1]*alpha + offset);
+				dst.at<Vec3b>(r, c)[2] = saturate_cast<uchar>(p[2]*alpha + offset);
+			}
+ 			else if (src.channels() == 1) {
+				float &p = fsrc.at<float>(r, c);
+				dst.at<uchar>(r, c) = saturate_cast<uchar>(p*alpha + offset);
+			}
+		}
+	}
+	namedWindow("dstshow", CV_WINDOW_AUTOSIZE);
+	imshow("dstshow", dst);
+
+	waitKey(0);
+
+	return 0;
+}
