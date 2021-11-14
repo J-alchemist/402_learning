@@ -1,0 +1,21 @@
+Containers-》Widget选择容器
+Display Widget-》Label放置标签
+可以拖动边框调整大小
+选中方框-》QLabel-》pixmap添加图片-》scaledContents自适应
+Spacers-》Horizontal上弹簧-》选中容器-》水平布局
+选中标签-》QWidget-》maximumSize限制大小
+选中容器-》Layout-》调整弹簧左右上下间距
+
+Containers-》Widget选择容器
+Display Widget-》Label放置标签
+Input Widget->line Edit放置行编辑
+注意这里两行是在同一个容器中-》网格布局
+
+弹簧可以固定间隔：fixed
+
+最后整体垂直布局
+
+添加容器时，整体布局先取消
+
+提升为时，基类类型必须一致
+

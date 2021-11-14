@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>butterfly.png</file>
+        <file>butterfly1.png</file>
+        <file>down.png</file>
+        <file>Frame.jpg</file>
+        <file>Luffy.png</file>
+        <file>LuffyQ.png</file>
+        <file>mario.gif</file>
+        <file>OnePiece.png</file>
+        <file>Sunny.jpg</file>
+        <file>sunny.png</file>
+        <file>up.png</file>
+    </qresource>
+</RCC>
