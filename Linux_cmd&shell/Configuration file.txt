@@ -1,0 +1,78 @@
+【配置文件&重要路径】
+内核官网：www.kernel.org
+
+ftp服务：vsftpd包                  /etc/vsftpd/vsftpd.conf
+nfs服务：nfs-utils包  rpcbing包    /etc/exports
+ssh服务：openssh-server包          /etc/ssh/sshd_config
+
+vim编辑器：/etc/vim/vimrc
+
+源码包存放：/usr/local/src
+安装路径：/usr/local/软件名
+
+系统图标：/usr/share/applications
+
+网卡文件：/etc/sysconfig/network-scripts/ifcfg-网卡名
+
+系统运行级别：/etc/inittab
+
+设备挂载uuid信息：/etc/fstab
+
+快捷键：/root/.vimrc 或者 /home/.vimrc
+
+网络yum源：/etc/yum.repos.d/CentOS-Base.repo
+本地yum源：/etc/yum.repos.d/CentOS-Media.repo
+
+用户信息文件：/etc/passwd
+影子文件：/etc/shadow
+
+组文件：/etc/group
+组密码文件：/etc/gshadow
+
+普通用户家目录：/home/用户名
+超级用户家目录：/root
+
+用户邮箱：  /var/spool/mail/用户名
+用户模板：  /ect/skel
+用户创建时默认值文件：/etc/default/useradd 和 /etc/login.defs
+
+历史命令存放：/etc/profile
+
+命令别名：/root/.bashrc
+
+系统支持的shell：/etc/shells
+本地终端欢迎信息：/etc/issue
+远程终端欢迎信息：/etc/issue.net
+登录后欢迎信息：/etc/motd
+
+服务自启动文件：/etc/rc.d/rc.local
+
+备份恢复目录：.../lost+found
+
+sudo权限修改目录：/etc/sudoers
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

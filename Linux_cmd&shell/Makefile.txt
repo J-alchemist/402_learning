@@ -1,0 +1,86 @@
+【Makefile语法】
+交叉编译器：
+make（调用编译）
+make clean（清除编译产生的文件）
+
+-----------------------------
+arm-linux-gnueabihf-gcc 		 编译文件1
+arm-linux-gnueabihf-ld                   链接文件
+arm-linux-gnueabihf-objcopy 		 格式转换2
+arm-linux-gnueabihf-objdump  		 反汇编
+-g		1产生调试信息、2不复制源文件中的调试信息
+-c 		编译
+-o		重命名
+-Ttext 		设置初始地址
+-D 		反汇编所有段
+-O binary	以二进制输出
+-S 		表示不要复制源文件中的重定位信息和符号信息
+-----------------------------
+输出：@echo 
+引用变量：$(变量)
+=       变量赋值时，是文本中最后一次的赋予的值
+:=      变量赋值时，是文本引用语句以上最靠近引用语句的值
+?=      变量赋值时，前面已经赋值就使用前面的值，没有就使用本次的赋值
++=      变量赋值时，增加变量
+
+编辑模板：
+目标名:依赖文件集合
+	命令
+
+模式规则：
+%
+
+自动化变量：
+$@    匹配模式中定义的集合
+$<    符合模式的一系列集合
+$^    去除依赖文件的重合文件
+
+伪目标：
+.PHONY: 目标名
+
+条件判断：（ifeq,ifneq,ifdef,ifndef）
+ifeq(a,b)            （判断a，b是否相等）
+	...
+else
+	...
+endif
+
+ifdef a               （判断a值是否为空）
+	...
+else
+	...
+endif
+
+函数：
+$(函数名 参数1,参数2...)
+$(subst a,b,string)        字符串内容替换，把string中的a替换为b
+$(patsubst)
+$(dir)
+$(notdir)
+$(foreath)
+$(wildcard)
+
+--------------------------------------
+如：
+aim = main.o a.o b.o
+main: $(aim)
+	gcc -o $(aim)
+
+%.o : %.c             （表示所有.o结尾文件依赖.c结尾文件）
+	gcc -c $<
+
+.PHONY: clean          (伪目标声明clean，避免与文件重名，影响makefile调用)
+clean: 
+	rm *.o
+	rm main
+--------------------------------------
+
+
+
+
+
+
+
+
+
+

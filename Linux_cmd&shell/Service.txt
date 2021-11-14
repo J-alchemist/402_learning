@@ -1,0 +1,54 @@
+【SFTP】ssh服务（远程登录终端）
+apt-get install openssh-server
+/etc/ssh/sshd_config
+
+【FTP】ftp服务（文件互传）
+apt-get install vsftpd
+vim /etc/vsftpd.conf（local_enable=YES、write_enable=YES）
+
+【NFS】（网络文件共享）
+apt-get install nfs-kernel-server portmap
+mkdir /home/yourname/nfs *(rw,sync,no_root_squash)
+vim /etc/exports（/home/yourname/nfs *(rw,sync,no_root_squash)）
+
+(如，nfs 80800000 192.168.1.250:/home/yourname/nfs/zImage）
+
+【TFTP】（网络文件共享）
+apt-get install xinetd
+apt-get install tftp-hpa tftpd-hpa
+mkdir /home/yourname/tftp
+vim /etc/xinetd.d/tftp（新建）
+server tftp
+{
+ socket_type = dgram
+ protocol = udp
+ wait = yes
+ user = root
+ server = /usr/sbin/in.tftpd 
+ server_args = -s /home/yourname/tftp/
+ disable = no
+ per_source = 11
+ cps = 100 2
+ flags = IPv4
+}
+vim /etc/default/tftpd-hpa
+#/etc/default/tftpd-hpa
+ TFTP_USERNAME="tftp"
+ TFTP_DIRECTORY="/home/yourname/tftp/"
+ TFTP_ADDRESS=":69"
+ TFTP_OPTIONS="-l -c -s"  
+
+（如，tftp 80800000 zImage）
+sudo /etc/init.d/xinetd restart
+
+测试：（tftp+ip，get+文件名）https://blog.csdn.net/zengxiaohua123/article/details/80614950
+
+
+【服务失败原因】
+1、服务安装后未重启
+2、对应文件未配置好
+3、创建的共享文件访问权限不足
+
+
+
+
