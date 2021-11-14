@@ -1,0 +1,233 @@
+参考文档：http://zh.highscore.de/cpp/boost/
+注意：一下用法在c++11中几乎引入
+【0】------------------------
+注意：要求动态分配：new
+//c++智能指针;
+std::auto_ptr，出了作用域自动释放内存，无需自己delete，可以进行对象传递
+如：std::auto_ptr<int> a(new int(2));
+	std::auto_ptr<int> a1(a);//此时a指针的使用权移交给a1，a消失（在拷贝的时候传递了所有权）
+ 
+//作用域指针：一个作用域指针独占一个动态分配的对象。一个作用域指针不能传递它所包含的对象的所有权到另一个作用域指针
+不能用动态分配的数组来做初始化，因为数组需要调用 delete[] 来释放，而自己是调用delete释放
+解释：scoped_ptr<int> i2(i1);或者将i1的地址赋给i2：i2=i1都不行！！
+boost::scoped_ptr<int> i(new int); 
+如：i.get()返回地址，i.reset(new int);重新分配地址；*i.get()=1给对象赋值，等同*i=1
+
+//作用域数组（一样独享）
+boost::scoped_array<int> i(new int[2]);//同样提供get和reset方法
+
+//共享指针
+解决了可以在标准容器里存储智能指针（操作容器使用共享指针，因为其可以共享一个对象的所有权，此处使用auto_ptr（传递所有权）、scoped_ptr（无法传递，独享）都不行，最后一个对象结束时，自动释放）
+可以进行拷贝：
+std::vector< boost::shared_ptr<int> > v; 
+std::vector< boost::shared_ptr<int> > v1（v）; 
+如：
+  std::vector< boost::shared_ptr<int> > v; 
+  v.push_back(boost::shared_ptr<int>(new int(1))); 
+  v.push_back(boost::shared_ptr<int>(new int(2))); 
+同样提供：get和reset方法
+
+//共享数组（行为类似于共享指针）
+boost::shared_array<int> i1(new int[2]); 
+boost::shared_array<int> i2(i1);
+同样提供了 get() 和 reset() 方法
+
+//unique_ptr则"独占"所指向的对象
+
+//指针容器（普通变量来操作）
+boost::ptr_vector<int> v0; 
+v0.push_back(new int(1)); 
+v0.push_back(new int(2));
+cout << v0[0] << " " << v0[1] << &v0 << endl;
+
+//弱指针：必定总是通过 boost::shared_ptr 来初始化的
+  boost::shared_ptr<int> sh(new int(99)); 
+  boost::weak_ptr<int> w(sh);
+它基本上只提供一个有用的方法: lock()（用于多线程共享一个资源，如何释放的问题，等待线程资源释放完毕，在完全释放指针）
+
+【1】------------------------
+//函数对象
+重载函数调用操作符的类，该类的对象常称为函数对象：
+class add : public std::binary_function<int, int, void> 
+{ 
+public: 
+  void operator()(int i, int j) const   
+  { 
+    std::cout << i + j << std::endl; 
+  } 
+}; 
+ std::for_each(v.begin(), v.end(), std::bind1st(add(), 10)); 
+
+//boost::bind(funname, _1, _2, _3);
+funname：要调用的函数名
+占位符：_1、_2、_3（有几个占位符，bind就为几元函数），交换_1、_2、_3的顺序就改变了传参的顺序。
+boost::bind(&world::hello, *w.get()) //&为取地址,绑定类的成员函数方法，world为类，w为类对象，hello为类的成员函数
+
+//boost::ref()：引用流
+void add(int i, int j, std::ostream &os) { }
+std::for_each(v.begin(), v.end(), boost::bind(add, 10, _1, boost::ref(std::cout))); 
+
+//boost::signals2::signal、boost::signals2::connection：信号与槽 
+boost::signals2::signal<void (int)> s;//定义了信号s，其槽函数的特征为void （int）类型（返回值类型，形参）
+s.connect(xx, funname)	//绑定具体函数，并指定运行顺序xx，0是最先执行
+s.disconnect(funname) 	//解除
+s.num_slots();		//返回该信号关联的函数数量
+s.disconnect_all_slots(); //解邦所有函数
+触发信号: 若定义了形参，则在触发信号的时候需要传递参数：s(val)
+绑定的函数返回值：定义信号时未设置合成器，s(val)只返回绑定的函数最后一个执行的函数返回值
+
+boost::signals2::connection c=s.connect(func3);
+if(c.connected())	//判断是否连接到函数
+c.disconnect();		//解除绑定
+
+【2】------------字符串
+#include <boost/algorithm/string.hpp> 
+//转换：
+boost::algorithm::to_upper_copy() 	//转换一个字符串为大写形式
+boost::algorithm::to_lower_copy() 	//小写
+//擦除，ierase_all_copy表示不分大小写
+	cout << boost::algorithm::erase_first_copy(s, "i")  << endl; 
+	cout << boost::algorithm::erase_nth_copy(s, "i", 0) << endl; //删除字符串s的首个i字符
+	cout << boost::algorithm::erase_last_copy(s, "i")   << endl; 
+	cout << boost::algorithm::erase_all_copy(s, ".")    << endl; 
+	cout << boost::algorithm::erase_head_copy(s, 2)     << endl; 
+	cout << boost::algorithm::erase_tail_copy(s, 2)     << endl; 
+//查找
+ boost::algorithm::find_first() 
+ boost::algorithm::find_last()
+ boost::algorithm::find_nth()
+ boost::algorithm::find_head() 
+ boost::algorithm::find_tail() 
+//连接
+  std::vector<std::string> v; 
+  v.push_back("Boris"); 
+  v.push_back("Schäling"); 
+boost::algorithm::join(v, " ")//以空格连接容器v的元素---》 Boris Schäling
+
+//替换
+  cout << boost::algorithm::replace_first_copy(s, "B", "D")  << endl; 
+  cout << boost::algorithm::replace_nth_copy(s, "B", 0, "D") << endl; 
+  cout << boost::algorithm::replace_last_copy(s, "B", "D")   << endl; 
+  cout << boost::algorithm::replace_all_copy(s, "B", "D")    << endl; 
+  cout << boost::algorithm::replace_head_copy(s, 5, "Doris") << endl; 
+  cout << boost::algorithm::replace_tail_copy(s, 8, "Becker")<< endl;
+
+//修剪（可以指定其他符号，满足谓词即可动作）
+trim_left_copy();
+trim_right_copy();
+trim_copy();
+//is_any_of()、is_digit()、is_upper()、is_lower() ：判断数字、大写、小写
+boost::algorithm::trim_left_copy_if(s, boost::algorithm::is_any_of(" "))//删除首部的空格
+boost::algorithm::trim_right_copy_if(s, boost::algorithm::is_any_of(" "))//删除尾部的空格
+boost::algorithm::trim_copy_if(s, boost::algorithm::is_any_of(" "))//删除首、尾的空格
+
+//判断（返回布尔值）
+boost::algorithm::starts_with(s, "Boris") //是否以什么开始
+boost::algorithm::ends_with(s, "Schäling") 
+boost::algorithm::contains(s, "is")
+boost::algorithm::lexicographical_compare(s, "Boris")//字典序比较
+
+//普通分割
+  std::string s = "Boris Schäling"; 
+  std::vector<std::string> v; 
+  boost::algorithm::split(v, s, boost::algorithm::is_space());//is_space()在空格出分割字符，将s字符串以空格拆分作为字符型容器v的元素
+
+//正则库regex： boost::regex 和 boost::smatch
+
+【3】-------------------------boost::thread
+线程一直被用来当并发地执行多个函数。
+//线程管理
+boost::thread t(Mythread2);
+t.interrupt();		//中段线程，必须在中断点（sleep等函数提供）
+t.join();	//阻塞调用：它可以暂停当前线程，直到调用 join() 的线程运行结束，如果不调用主线程结束了，其子线程gg
+boost::this_thread::get_id()	//返回一个当前线程的ID号，静态函数（类+函数名直接调用）
+
+//同步
+//法1
+boost::mutex mutex1;//独立互斥量：当一个特定的线程拥有资源的时候防止其他线程夺取其所有权
+mutex1.lock(); 		//锁定互斥量
+mutex1.unlock(); //释放互斥量
+//法2O（互斥锁）创建即加锁，作用域结束自动析构并解锁，无需手工解锁
+boost::lock_guard<boost::mutex> lock(mutex1); 
+//法3（独占锁）
+boost::timed_mutex mutex2;
+boost::unique_lock<boost::timed_mutex> lock(mutex2, boost::try_to_lock);
+if(lock.owns_lock())	//是否获得互斥量
+lock.timed_lock(...)		//尝试一定时间获得互斥体，尝试时间
+boost::timed_mutex *m = lock.release();	//解除与互斥关联（其可以自动释放，可注释）
+m->unlock(); 	//释放
+//法4（共享锁）在线程只对某个资源读访问的情况下使用
+boost::shared_mutex mutex; //共享互斥量
+boost::shared_lock<boost::shared_mutex> lock(mutex);
+//总结
+获得互斥量的方法：lock() 会一直等待，直到获得一个互斥体。 try_lock() 则不会等待，但如果它只会在互斥体可用的时候才能获得，否则返回 false 。 最后，timed_lock() 试图获得在一定的时间内获取互斥体。
+boost::mutex 提供了 lock() 和try_lock() 两个方法，boost::shared_mutex提供了不止 lock()和shared_lock方法，但是 boost::timed_mutex 只支持 timed_lock()
+独占锁可以使用 独立/共享互斥量；共享锁只能使用共享互斥量
+
+boost::condition_variable_any cond; //条件变量
+
+【4】--------------------异步输入输出Asio（含socket）
+异步数据处理就是指，任务触发后不需要等待它们完成。在任务完成时触发一个应用。在等待任务完成时不需要阻塞应用程序，可以去执行其它任务。
+异步数据处理的应用程序基于两个概念：I/O 服务和 I/O 对象。 I/O 服务，进行异步数据处理，而 I/O 对象则用于初始化特定的操作。
+boost::asio::io_service  io_service;//定义io服务
+boost::asio::ip::tcp::socket	//io对象
+boost::asio::deadline_timer
+timer.async_wait(handler);   //非阻塞调用，handle是要调用的函数
+io_service.run();		//阻塞当前线程，由操作系统接管控制权
+//网络编程
+域名解析器，网址翻译成相应的IP地址
+DNS服务器，其作用就象是电话本，它知晓哪个IP地址被赋给了哪台PC
+async_connect（）；//异步连接
+async_read_some（）；//分次读取
+async_read（）；//读完所有
+boost::asio::write（）；//调用socket写请求
+boost::asio::ip::tcp::resolver::query //查询域名
+async_resolve（）；//域名解析
+
+listen(); //接收状态
+async_accept（）；//等待初始连接
+async_write（）；//写完
+async_write_some（）；//写一些
+
+【5】---------------------进程间通讯（ Boost.Interprocess）
+boost::interprocess::shared_memory_object //创建共享内存块
+truncate（）；//指定大小（rw属性时才可调用）
+get_name（）；//获取内存块名称
+get_size（）；//获取内存块大小
+get_address（）；//获取内存块的映射地址
+boost::interprocess::shared_memory_object::remove //删除共享内存
+
+boost::interprocess::managed_shared_memory	//创建托管共享内存
+int *i = managed_shm.construct<int>("Integer")(99)；//创建一个名为"Integer"的int型对象，值为99
+int *i = managed_shm.construct<int>("Integer")[3](10);//创建10个数int型数组，元素为99
+i[1]=10值访问及修改。
+construct失败情况：1创建的数据大小超过托管内存块大小，2给定名称的对象已经在托管的共享内存中存在
+
+std::pair<int*, std::size_t> p = managed_shm.find<int>("Integer");//查找，返回值是pair类型的
+*p.first、*(p.first+1) 值访问，p.second个数访问
+
+int *i1 = managed_shm.find_or_construct<int>("Integer")(20);//可以代替construct+find
+
+managed_shm.destroy<int>("Integer");//摧毁共享内存中的"Integer"对象，或者destroy_ptr
+managed_shm.destroy<int>(i2);//摧毁数组、指针
+
+//段管理器：托管在共享内存中的内存，在共享内存中使用容器
+
+//同步（类似线程同步）
+Boost.Interprocess 提供了两种同步对象，匿名对象：直接存储在共享内存上，这使得他们自动对所有应用程序可用。 命名对象由操作系统管理，所以它们不存储在共享内存上，它们可以被应用程序通过名称访问。
+匿名对象：boost::interprocess::interprocess_mutex
+命名对象：boost::interprocess::named_mutex
+
+匿名条件变量： boost::interprocess::interprocess_condition
+命名条件变量： boost::interprocess::named_condition
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,1 @@
+/usr/bin/x86_64-linux-gnu-g++-7  -g   CMakeFiles/main.dir/main.cpp.o CMakeFiles/main.dir/myc++class.cpp.o  -o ../../bin/main 

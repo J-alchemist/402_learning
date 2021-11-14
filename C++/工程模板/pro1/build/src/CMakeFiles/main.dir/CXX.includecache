@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../inc/myc++class.h
+iostream
+-
+memory
+-
+
+/home/gj/C++/pro1/src/main.cpp
+iostream
+-
+memory
+-
+string
+-
+myc++class.h
+/home/gj/C++/pro1/src/myc++class.h
+
+/home/gj/C++/pro1/src/myc++class.cpp
+myc++class.h
+/home/gj/C++/pro1/src/myc++class.h
+string.h
+/home/gj/C++/pro1/src/string.h
+

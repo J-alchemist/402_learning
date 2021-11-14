@@ -1,0 +1,149 @@
+https://blog.csdn.net/ClaireSy/article/details/108423061
+【函数模板】
+//利用模板提供通用的交换函数，C11允许变长模板
+template<typename T>或者template<class T>
+void mySwap(T& a, T& b)
+{
+	T temp = a;
+	a = b;
+	b = temp;
+}
+mySwap(a, b);//1、自动类型推导
+mySwap<int>(a, b);//2、显示指定int类型，若a，b不是int型，则会自动进行数据类型转换
+mySwap<>(a, b);//当函数模板与普通函数均满足调用条件时，优先调用普通，但可以使用如上指令进行强制调用模板函数
+
+具体化的模板：
+//具体化，显示具体化的原型和定意思以template<>开头，并通过名称来指出类型
+template<> bool myCompare(Person &p1, Person &p2)
+{
+	if ( p1.m_Name  == p2.m_Name && p1.m_Age == p2.m_Age)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+类模板：
+在模板参数列表中可以有默认参数，不能自动推导参数
+template<class NameType, class AgeType = int> 
+class Person
+{
+public:
+	Person(NameType name, AgeType age)
+	{
+		this->mName = name;
+		this->mAge = age;
+	}
+
+	NameType mName;
+	AgeType mAge;
+};
+
+Person<string ,int> p("孙悟空", 1000); 
+
+类模板产生的对象作函数参数：
+void printPerson1(Person<string, int> &p) //1、指定传入的类型
+
+template <class T1, class T2>//2、参数模板化
+void printPerson2(Person<T1, T2>&p)
+
+template<class T>
+void printPerson3(T & p)//3、整个类模板化
+
+类模板的继承：
+当子类继承的父类是一个类模板时，子类在声明的时候，要指定出父类中T的类型
+class Son :public Base<int> //必须指定一个类型
+{
+};
+或者也可以类模板继承类模板
+template<class T1, class T2>
+class Son2 :public Base<T2>
+
+类模板中成员函数类外实现时，需要加上模板参数列表：
+template<class T1, class T2>
+Person<T1, T2>::Person(T1 name, T2 age) 
+
+类模板成员函数分文件编写：
+将声明和实现写到同一个文件中，并更改后缀名为.hpp
+在另一个文件里直接#include "xxx.hpp"
+
+类模板配合友元函数的类内和类外实现：
+建议全局函数做类内实现
+friend void printPerson(Person<T1, T2> & p)//1、全局函数配合友元   类内实现
+friend void printPerson2<>(Person<T1, T2> & p);//2、全局函数配合友元  类外实现
+template<class T1, class T2>
+void printPerson2(Person<T1, T2> & p){ }
+
+//---------------
+函数调用操作符：（）
+重载函数调用函数操作符的类，该类的对象常称为函数对象
+函数对象使用重载的()时，叫仿函数
+函数对象(仿函数)是一个类，不是一个函数
+class MyAdd
+{
+  public :
+	int operator()(int v1,int v2)
+	{
+		return v1 + v2;
+	}
+};
+MyAdd myAdd;
+myAdd(10, 10);//类似函数调用，实则重载了（）运算符
+
+bool类型的仿函数称为谓词：
+bool operator()(int val) { } //一个参数: 一元谓词
+bool operator()(int num1, int num2) { } //2个参数: 二元谓词
+
+C++内建的函数对象：#include <functional>：
+negate<int> n;//取模仿函数
+int n2 = n(50);	//50取反
+
+greater<int> m;
+int m2 = m(20,30);  //比较20与30大小，返回布尔值
+
+【STL- 常用算法：】
+<algorithm> 
+<functional>
+<numeric>
+【遍历】<algorithm> 
+for_each //遍历容器
+for_each(iterator beg, iterator end, _func);
+// 遍历算法 遍历容器元素
+// beg 开始迭代器
+// end 结束迭代器
+// _func 函数或者函数对象
+
+transform //搬运容器到另一个容器中
+transform(iterator beg1, iterator end1, iterator beg2, _func);
+//beg1 源容器开始迭代器
+//end1 源容器结束迭代器
+//beg2 目标容器开始迭代器
+//_func 函数或者函数对象
+【查找】
+find //查找元素
+find_if //按条件查找元素
+adjacent_find //查找相邻重复元素
+binary_search //二分查找法
+count //统计元素个数
+count_if //按条件统计元素个数
+【排序】
+sort //对容器内元素进行排序
+random_shuffle //洗牌 指定范围内的元素随机调整次序
+merge // 容器元素合并，并存储到另一容器中
+reverse // 反转指定范围的元素
+【拷贝和替换】
+copy // 容器内指定范围的元素拷贝到另一容器中
+replace // 将容器内指定范围的旧元素修改为新元素
+replace_if // 容器内指定范围满足条件的元素替换为新元素
+swap // 互换两个容器的元素
+【算术生成】#include <numeric>
+accumulate // 计算容器元素累计总和
+fill // 向容器中添加元素
+【集合】
+set_intersection // 求两个容器的交集
+set_union // 求两个容器的并集
+set_difference // 求两个容器的差集
+

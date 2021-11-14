@@ -1,0 +1,12 @@
+[
+{
+  "directory": "/home/gj/C++/pro1/build/src",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I/home/gj/C++/pro1/inc  -g   -o CMakeFiles/main.dir/main.cpp.o -c /home/gj/C++/pro1/src/main.cpp",
+  "file": "/home/gj/C++/pro1/src/main.cpp"
+},
+{
+  "directory": "/home/gj/C++/pro1/build/src",
+  "command": "/usr/bin/x86_64-linux-gnu-g++-7   -I/home/gj/C++/pro1/inc  -g   -o CMakeFiles/main.dir/myc++class.cpp.o -c /home/gj/C++/pro1/src/myc++class.cpp",
+  "file": "/home/gj/C++/pro1/src/myc++class.cpp"
+}
+]

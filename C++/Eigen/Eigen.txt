@@ -1,0 +1,57 @@
+https://eigen.tuxfamily.org/dox/GettingStarted.html
+注意：动态矩阵必须传入大小
+Random：动态矩阵必须传入大小，即Random（row，col）；
+Zero：全0阵
+Ones：全1阵
+Identity：单位阵
+Constant：常量阵，Constant(0.5)
+
+Vector5d m：默认支持到4，大矩阵可用==》Matrix<double ,5 , 1> m；
+MatrixXi： = Matrix<int ,5 , 5> m；
+
+assert(x):若x为0则会断言失败，程序卡死在此处
+cout.precision(3):从此句开始的，一下所有输出的数据采用3位小数
+
+determinant(): 计算行列式
+v.norm()：返回二范数：也就是平方和开二次跟
+q = q.normalized():四元素/向量归一化：四元素除以分量平方和开二次根号，返回一个新的规范化的向量
+q.normalize()：四元素/向量归一化，直接改变当前向量为新的规范化的向量, 无返回值
+toRotationMatrix():四元素转换为旋转矩阵（四元素必须先归一化）
+rotate：添加旋转矩阵，加pre前缀，只是将得到的矩阵覆盖自身
+pretranslate：添加平移向量
+inverse()：逆
+transpose(): 转置，InPlace后缀，覆盖原矩阵，不能这么写m = m.transpose()
+conjugate(): 共轭
+adjoint（）：伴随
+q.coeffs():四元数输出系数
+q.matrix(): 旋转向量、四元素的矩阵显示（可用cout输出）
+q.vec()：输出虚部
+m.trace():矩阵的迹
+SelfAdjointEigenSolver<> x;
+x.eigenvalues():特征值
+x.eigenvectors():特征向量
+x.row(2).col(0):元素2行0列
+
+
+基本问题：世界坐标系，相机坐标系，相机坐标系下的一点(向量)如何转换到世界坐标系？
+变换矩阵SE(3) = 平移 + 旋转SO(3)
+旋转的描述：
+旋转矩阵（一定为正交矩阵）
+旋转向量（3个量，罗戈里格斯，角轴，（seta，向量））
+欧拉角（偏航，俯仰，横滚）
+四元素（复数的扩充）
+
+李代数是李群表示的曲面空间的正切空间（群求导-->代数）
+R^：反对称矩阵
+
+可视化包：
+libpcl-dev
+pcl-tools
+libopencv-dev
+
+非线性最小二乘：
+Ceres
+g2o（slam常用）
+安装，去git搜索
+
+
