@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/serverPoll.c.dir/serverPoll.c.o CMakeFiles/serverPoll.c.dir/__/lib/Myrw.c.o  -o ../../bin/serverPoll.c -rdynamic 

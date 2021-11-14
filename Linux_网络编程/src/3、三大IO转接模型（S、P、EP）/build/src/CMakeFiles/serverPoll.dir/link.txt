@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/serverPoll.dir/serverPoll.c.o CMakeFiles/serverPoll.dir/__/lib/wrap.c.o  -o ../../bin/serverPoll -rdynamic 

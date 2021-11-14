@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lib/inc/wrap.h
+
+/home/gj/Linux_net/t3/lib/wrap.c
+stdlib.h
+-
+stdio.h
+-
+unistd.h
+-
+errno.h
+-
+sys/socket.h
+-
+
+/home/gj/Linux_net/t3/src/serverSelect.c
+stdio.h
+-
+stdlib.h
+-
+unistd.h
+-
+string.h
+-
+arpa/inet.h
+-
+ctype.h
+-
+wrap.h
+/home/gj/Linux_net/t3/src/wrap.h
+

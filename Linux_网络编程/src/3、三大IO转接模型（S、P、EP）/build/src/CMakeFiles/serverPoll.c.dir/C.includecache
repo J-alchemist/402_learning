@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../lib/inc/Myrw.h
+
+/home/gj/Linux_net/t3/lib/Myrw.c
+stdlib.h
+-
+stdio.h
+-
+unistd.h
+-
+errno.h
+-
+sys/socket.h
+-
+Myrw.h
+/home/gj/Linux_net/t3/lib/Myrw.h
+
+/home/gj/Linux_net/t3/src/serverPoll.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+netinet/in.h
+-
+arpa/inet.h
+-
+poll.h
+-
+errno.h
+-
+ctype.h
+-
+Myrw.h
+/home/gj/Linux_net/t3/src/Myrw.h
+

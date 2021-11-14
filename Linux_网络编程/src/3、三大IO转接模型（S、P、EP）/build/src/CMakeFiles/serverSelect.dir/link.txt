@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/serverSelect.dir/serverSelect.c.o CMakeFiles/serverSelect.dir/__/lib/wrap.c.o  -o ../bin/serverSelect -rdynamic 

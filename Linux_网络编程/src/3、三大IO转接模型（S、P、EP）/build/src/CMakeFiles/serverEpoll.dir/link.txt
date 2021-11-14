@@ -1,0 +1,1 @@
+/usr/bin/cc     CMakeFiles/serverEpoll.dir/serverEpoll.c.o CMakeFiles/serverEpoll.dir/__/lib/wrap.c.o  -o ../bin/serverEpoll -rdynamic 
