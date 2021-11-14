@@ -1,0 +1,241 @@
+【ubuntu用户操作：】
+1.创建用户：
+Step1 创建用户：
+sudo useradd username -m
+注意要在后面加-m，否则不会在home路径下创建该用户的文件夹
+
+创建好之后可以在/home/路径下查看该用户名的文件夹
+
+Step2 设置密码：
+sudo passwd username
+在弹出来的提示窗口中设置密码即可
+
+Step3 切换用户：
+su username
+输入密码后即可切换到该用户
+
+2.删除用户：
+sudo userdel -r username
+加上-r可以删除/home/路径下的用户文件夹，否则不能
+
+//---------------------------------------------------------------------
+sudo -u postgres psql;	切换为postgres用户（进入到了psql数据库环境）
+create user sde with password '123456';	创建sde用户并设置密码
+create database sde owner sde;	为用户sde创建数据库sde
+grant all privileges on database sde to sde;	赋予用户sde操作sde数据库的所有权限
+
+【postgresql】：命令行必须以分号结束，没有分号就算是续行！！！
+postgres既是数据库管理员也是linux系统的用户
+sudo su postgres 切换到数据库管理用户
+cd 切换到数据库根目录（/var/lib/postgresql）
+psql --version
+psql -l	查看系统有哪些数据库
+createdb guojian 建立数据库
+psql guojian 进入psql命令行模式，并打开guojian数据库
+help	查看指令
+select now();	查看时间
+select version();  查看版本
+
+
+【操作数据表】：
+create table posts (title varchar(255), content text);  创建名为posts的数据表
+\dt posts  查看数据表posts简单信息
+\d posts  查看数据表posts详细信息
+alter table posts rename to myposts;	修改表名
+drop table myposts;	删除名为myposts的表，多个用逗号隔开（！！！）
+回到postgres管理员（\q），nano xx.sql建立sql文件，进入psql guojian，\i xx.sql执行
+
+
+【常用字段类型】：
+数值型：
+integer(int)
+real浮点型
+serial序列型（+1）
+
+文字型：
+char
+varchar
+text
+
+布尔型：
+boolean
+
+日期型：
+date
+time
+timestamp
+
+特色：
+Array
+ip地址型
+JSON型
+XML型
+
+/*
+
+create table posts (
+        id serial primary key,
+        title varchar(255) not null,
+        content text check( length(content) > 3),
+        is_draft boolean default TRUE,
+        is_del boolean default FALSE,
+        create_date timestamp default 'now'
+);
+
+第一个为变量、第二个类型、第三个约束条件
+
+约束条件：
+not null不能为空
+unique在所有数据中值必须唯一
+check字段设置条件
+default字段默认值
+primary key(not null, unique)：主键，不能为空，且唯一（就是一个id）
+
+*/
+
+
+【insert插入语句】：
+insert into posts (title, content) values ('title1', 'content1');  将表的title, content修改为...
+select * from posts;	搜索表posts的所有数据（*）
+
+
+【select搜索语句】：
+create table users (
+        id serial primary key,
+        player varchar(255) not null,
+        score real,
+        team varchar(255)  
+);
+
+insert into users(player , score, team ) values ('哈登' , 90, '火箭' );
+
+select player from users;   搜索users表的player属性
+
+【where条件匹配语句】：
+select * from users where id = 1 ;
+select * from users where id != 1 ;
+select * from users where score < 95 and score > 85 ;
+select * from users where player like '哈_' ;	_只匹配一个字符
+select * from users where player like '哈%' ;	%匹配所有字符
+
+
+【order by、limit、offset抽取特定数据】：
+select * from users order by score asc;		以score变量升序排列
+				   desc;	以score变量降序排列
+
+select * from users order by team;		以team相同的排在一起，多种team以字母顺序排列
+
+select * from users order by team, score desc;
+
+select * from users order by score desc limit 2;	只取前2个	
+
+select * from users order by score desc limit 2 offset 1;    要取的前两个的位置往后偏移1个开始取
+
+
+【distinct、group by（having）、order by和统计函数】：
+select distinct team from users;	过滤team重复的数据
+select sum(score) from users;		sum函数统计score
+select max(score) from users;
+select min(score) from users;
+
+select * from users where score = (select max(score) from users);
+
+select team, max(score) from users group by team;   以team分组，抽出组名和每组最大得分
+select team, max(score) from users group by team having max(score) > 90;   在上一步基础上抽出最大得分大于90的
+select team, max(score) from users group by team having max(score) > 90 order by max(score);   在上一步基础上在进行得分的升序排序
+
+【常用函数】：
+select player, length(player) from users;	获取长度
+select player, concat(player, '/', team) from users;	显示球员名称、将球员名称与组名间加/并显示
+
+select player, concat(player, '/', team) as "球员信息" from users;		将contact新字段表头重命名为球员信息
+
+select substring(team, 1, 1) as "球队首文字" from users;		切割子串，将team首文字切割出来并显示，表头重命名为球队首文字
+
+select concat('我', substring(team, 1, 1)) as "球队首文字" from users;		
+
+select * from users order by random();		随机排序
+select * from users order by random() limit 1;
+
+【(update..set)更新与删除】:
+update users set score = 90 where palyer = "詹姆斯";
+update users set score = score + 1 where team = '骑士';		骑士队的得分+1
+update users set score = score + 1 where team IN('骑士', '火箭');		骑士队的得分+1
+
+delete from users where score > 90;
+
+【变更表结构】：
+alter table users add fullname varchar(255);	给表添加一个字段叫fullname
+alter table users drop fullname;	删除字段
+
+alter table users rename player to nba_player;	将表users的player字段名变为nba_play
+
+alter table users alter nba_player type varchar(100);		改变nba_play字段的类型
+
+create index nba_play_index on users(nba_player);	给users表的nba_player加上索引nba_play_index，select时速度会非常快
+drop index nba_play_index;		删除索引
+
+【操作多个表】：
+db3.sql:
+create table users (
+	id serial primary key,
+	player varchar(255) not null,
+	score real,
+	team varchar(255)
+);
+
+insert into users (player, score, team) values
+('库里', 28.3, '勇士'),
+('哈登', 30.2, '火箭'),
+('阿杜', 25.6, '勇士'),
+('阿詹', 27.8, '骑士'),
+('神龟', 31.3, '雷霆'),
+('白边', 19.8, '热火');
+
+create table twitters (
+	id serial primary key,
+	user_id integer,
+	content varchar(255) not null
+);
+
+insert into users (user_id, content) values
+(1, 'sb1'),
+(2, 'sb2'),
+(3, 'sb3'),
+(4, 'sb4'),
+(5, 'sb5'),
+(1, 'sb1sb1');
+
+select u.player, t.content from users as u, twitters as t where u.id = t.user_id;
+
+
+【使用视图】：
+视图就是一个select语句，把业务系统中常用的SELECT语句简化成一个类似于表的对象，
+便于简单读取与开发。
+
+select u.player, t.content from users as u, twitters as t where u.id = t.user_id and u.id = 1;
+create view curry_talks as 上句;
+
+/dv		查看视图
+
+select * from curry_talks;		像使用表一样使用视图
+
+drop view curry_talks;		删除视图
+
+【使用事务Transaction】：（原子性操作需要用到事务）
+begin;		开启事务模式
+（中间的操作是需要一致性完成，不可打断）
+update users set score = 50 where player = '库里';
+update users set score = 60 where player = '哈登';
+commit;			完成事务处理
+select * from users;
+
+
+begin;		开启事务模式
+（中间的操作是需要一致性完成，不可打断）
+update users set score = 50 where player = '库里';
+update users set score = 60 where player = '哈登';
+rollback;		放弃前面的事务处理，回滚到初始状态
+select * from users;
+
+
