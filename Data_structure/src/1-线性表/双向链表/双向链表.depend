@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1627959823 source:e:\ds数据结构\pro\1-线性表\双向链表\dlinklistmain.c
+	<stdio.h>
+	<stdlib.h>
+	"DLinkList.h"
+
+1627983917 e:\ds数据结构\pro\1-线性表\双向链表\dlinklist.h
+
+1627983514 source:e:\ds数据结构\pro\1-线性表\双向链表\dlinklist.c
+	<stdio.h>
+	<malloc.h>
+	"DLinkList.h"
+

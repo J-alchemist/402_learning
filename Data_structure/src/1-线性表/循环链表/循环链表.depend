@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1627952022 source:e:\ds数据结构\pro\1-线性表\循环链表\circlelist.c
+	<stdio.h>
+	<malloc.h>
+	"CircleList.h"
+
+1627952494 e:\ds数据结构\pro\1-线性表\循环链表\circlelist.h
+
+1627952806 source:e:\ds数据结构\pro\1-线性表\循环链表\circlelistmain.c
+	<stdio.h>
+	<stdlib.h>
+	"CircleList.h"
+

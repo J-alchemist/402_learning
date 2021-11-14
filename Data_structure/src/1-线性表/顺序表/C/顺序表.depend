@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1627806868 source:e:\ds数据结构\pro\1-线性表\顺序表\seqlist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"seqlist.h"
+
+1627806352 e:\ds数据结构\pro\1-线性表\顺序表\seqlist.h
+
+1627829691 source:e:\ds数据结构\pro\1-线性表\顺序表\seqlinkmain.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"seqlist.h"
+
+1627830058 source:e:\ds数据结构\pro\1-线性表\顺序表\c\seqlinkmain.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"seqlist.h"
+
+1628127471 e:\ds数据结构\pro\1-线性表\顺序表\c\seqlist.h
+

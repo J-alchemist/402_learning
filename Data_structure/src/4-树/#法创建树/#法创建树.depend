@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1628145835 source:e:\ds数据结构\pro\4-树\#法创建树\#号创建树.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+

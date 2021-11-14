@@ -1,0 +1,16 @@
+# depslib dependency file v1.0
+1628315258 source:e:\ds数据结构\pro\1-线性表\单向链表\c++\main.cpp
+	<iostream>
+	<string>
+	"linklist.cpp"
+
+1628308336 e:\ds数据结构\pro\1-线性表\单向链表\c++\linklist.h
+
+1628308142 source:e:\ds数据结构\pro\1-线性表\单向链表\c++\linklist.cpp
+	"linklist.h"
+	<iostream>
+
+1628308142 e:\ds数据结构\pro\1-线性表\单向链表\c++\linklist.cpp
+	"linklist.h"
+	<iostream>
+

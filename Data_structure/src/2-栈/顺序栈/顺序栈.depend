@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1627880737 source:e:\ds数据结构\pro\2-栈\顺序栈\seqstackmain.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"seqstack.h"
+
+1627880118 e:\ds数据结构\pro\2-栈\顺序栈\seqstack.h
+
+1627806868 source:e:\ds数据结构\pro\2-栈\顺序栈\seqlist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"seqlist.h"
+
+1627806352 e:\ds数据结构\pro\2-栈\顺序栈\seqlist.h
+
+1627880112 source:e:\ds数据结构\pro\2-栈\顺序栈\seqstack.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"seqlist.h"
+	"seqstack.h"
+

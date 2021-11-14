@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1627864358 source:e:\ds数据结构\pro\3-队列\链式列\linklist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linklist.h"
+
+1627862918 e:\ds数据结构\pro\3-队列\链式列\linklist.h
+
+1627910263 source:e:\ds数据结构\pro\3-队列\链式列\linkqueuemain.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"linkqueue.h"
+
+1627909996 e:\ds数据结构\pro\3-队列\链式列\linkqueue.h
+
+1627910148 source:e:\ds数据结构\pro\3-队列\链式列\linkqueue.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
+	"linkqueue.h"
+	"linklist.h"
+

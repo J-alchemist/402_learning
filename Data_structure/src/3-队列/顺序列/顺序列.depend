@@ -1,0 +1,24 @@
+# depslib dependency file v1.0
+1627902590 source:e:\ds数据结构\pro\3-队列\顺序列\seqlist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"seqlist.h"
+
+1627902373 e:\ds数据结构\pro\3-队列\顺序列\seqlist.h
+
+1627902893 source:e:\ds数据结构\pro\3-队列\顺序列\seqqueue.c
+	<stdio.h>
+	<string.h>
+	<stdio.h>
+	"seqlist.h"
+	"seqqueue.h"
+
+1627901669 e:\ds数据结构\pro\3-队列\顺序列\seqqueue.h
+
+1627902442 source:e:\ds数据结构\pro\3-队列\顺序列\seqqueuemain.c
+	<stdio.h>
+	<string.h>
+	<stdio.h>
+	"seqqueue.h"
+

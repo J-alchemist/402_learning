@@ -1,0 +1,34 @@
+# depslib dependency file v1.0
+1627864358 source:e:\ds数据结构\pro\2-栈\栈应用\linklist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linklist.h"
+
+1627862918 e:\ds数据结构\pro\2-栈\栈应用\linklist.h
+
+1627892920 source:e:\ds数据结构\pro\2-栈\栈应用\linkstack.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linkstack.h"
+	"linklist.h"
+
+1627892081 e:\ds数据结构\pro\2-栈\栈应用\linkstack.h
+	"linklist.h"
+
+1627896318 source:e:\ds数据结构\pro\2-栈\栈应用\main01_就近匹配.c
+	<stdio.h>
+	<stdlib.h>
+	"linkstack.h"
+
+1627896449 source:e:\ds数据结构\pro\2-栈\栈应用\main02_中缀转后缀.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linkstack.h"
+
+1627896422 source:e:\ds数据结构\pro\2-栈\栈应用\main03_后缀计算.c
+	<stdio.h>
+	"LinkStack.h"
+

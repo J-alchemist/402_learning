@@ -1,0 +1,29 @@
+# depslib dependency file v1.0
+1627947419 source:e:\ds数据结构\pro\1-线性表\单向链表\linklist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linklist.h"
+
+1627917890 e:\ds数据结构\pro\1-线性表\单向链表\linklist.h
+
+1627921791 source:e:\ds数据结构\pro\1-线性表\单向链表\linklistmain.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linklist.h"
+
+1627947419 source:e:\ds数据结构\pro\1-线性表\单向链表\c\linklist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linklist.h"
+
+1627917890 e:\ds数据结构\pro\1-线性表\单向链表\c\linklist.h
+
+1627953203 source:e:\ds数据结构\pro\1-线性表\单向链表\c\linklistmain.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linklist.h"
+

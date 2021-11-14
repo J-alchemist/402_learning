@@ -1,0 +1,20 @@
+# depslib dependency file v1.0
+1628143073 source:e:\ds数据结构\pro\1-线性表\顺序表\c++\c++pro\main.cpp
+	<iostream>
+	"SeqList.cpp"
+
+1628127202 e:\ds数据结构\pro\1-线性表\顺序表\c++\c++pro\include\seqlist.h
+
+1628125540 source:e:\ds数据结构\pro\1-线性表\顺序表\c++\c++pro\src\seqlist.cpp
+	"SeqList.h"
+
+1628132342 e:\ds数据结构\pro\1-线性表\顺序表\c++\c++pro\seqlist.h
+
+1628143200 source:e:\ds数据结构\pro\1-线性表\顺序表\c++\c++pro\seqlist.cpp
+	"SeqList.h"
+	<stdlib.h>
+
+1628143200 e:\ds数据结构\pro\1-线性表\顺序表\c++\c++pro\seqlist.cpp
+	"SeqList.h"
+	<stdlib.h>
+

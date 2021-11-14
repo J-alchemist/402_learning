@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1627864358 source:e:\ds数据结构\pro\2-栈\链式栈\linklist.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linklist.h"
+
+1627862918 e:\ds数据结构\pro\2-栈\链式栈\linklist.h
+
+1627894285 source:e:\ds数据结构\pro\2-栈\链式栈\linkstackmain.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linkstack.h"
+
+1627892081 e:\ds数据结构\pro\2-栈\链式栈\linkstack.h
+	"linklist.h"
+
+1627892920 source:e:\ds数据结构\pro\2-栈\链式栈\linkstack.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"linkstack.h"
+	"linklist.h"
+

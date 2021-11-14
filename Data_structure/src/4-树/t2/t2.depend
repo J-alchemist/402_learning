@@ -1,0 +1,13 @@
+# depslib dependency file v1.0
+1628090977 source:e:\ds数据结构\pro\4-树\t2\tree_operate.c
+	"tree_operate.h"
+	<stdio.h>
+
+1628082840 e:\ds数据结构\pro\4-树\t2\tree_operate.h
+
+1628085976 source:e:\ds数据结构\pro\4-树\t2\tree-基本操作.c
+	<stdlib.h>
+	<string.h>
+	<stdio.h>
+	"tree_operate.h"
+

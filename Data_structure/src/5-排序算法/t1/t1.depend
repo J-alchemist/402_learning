@@ -1,0 +1,32 @@
+# depslib dependency file v1.0
+1628241024 source:e:\ds数据结构\pro\5-排序算法\t1\demo01_选择法.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1628241007 source:e:\ds数据结构\pro\5-排序算法\t1\demo02_插入.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1628256878 source:e:\ds数据结构\pro\5-排序算法\t1\demo04_希尔排序法.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1628259794 source:e:\ds数据结构\pro\5-排序算法\t1\demo05_快速排序.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1628259783 source:e:\ds数据结构\pro\5-排序算法\t1\demo06_归并算法.c
+	<malloc.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
+1628255770 source:e:\ds数据结构\pro\5-排序算法\t1\demo03_冒泡.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
