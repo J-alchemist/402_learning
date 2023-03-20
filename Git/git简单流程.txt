@@ -1,3 +1,5 @@
+ssh-keygen -t rsa -C "邮箱"
+
 sudo apt-get install git
 随便创建个文件夹作为本地仓库，也可以直接家目录作为本地仓库
 git init
